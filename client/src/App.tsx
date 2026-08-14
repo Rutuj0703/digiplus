@@ -3,6 +3,8 @@ import { LayoutDashboard, Ticket, PlusCircle, Search, BookOpen, Activity } from 
 import Dashboard from './pages/Dashboard';
 import IncidentDetails from './pages/IncidentDetails';
 import CreateIncident from './pages/CreateIncident';
+import SearchPage from './pages/Search';
+import KnowledgePage from './pages/Knowledge';
 
 function App() {
   const location = useLocation();
@@ -70,8 +72,8 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/incidents/new" element={<CreateIncident />} />
               <Route path="/incidents/:id" element={<IncidentDetails />} />
-              <Route path="/search" element={<div className="fade-in"><h1 className="text-3xl font-bold">Search Implementation</h1></div>} />
-              <Route path="/knowledge" element={<div className="fade-in"><h1 className="text-3xl font-bold">Knowledge Base</h1></div>} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/knowledge" element={<KnowledgePage />} />
             </Routes>
           </div>
         </div>
