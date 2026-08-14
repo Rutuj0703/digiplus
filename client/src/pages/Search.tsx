@@ -31,9 +31,9 @@ export default function SearchPage() {
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder="E.g. Database connection is returning ECONNREFUSED..."
-          className="w-full px-6 py-4 pr-16 text-lg border border-slate-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-shadow"
+          className="w-full px-6 py-4 pr-16 text-lg bg-white/60 backdrop-blur-md border border-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-shadow"
         />
-        <button type="submit" className="absolute right-3 top-2.5 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <button type="submit" className="absolute right-3 top-2.5 p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
           <SearchIcon className="w-5 h-5" />
         </button>
       </form>

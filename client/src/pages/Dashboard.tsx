@@ -14,7 +14,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-10 fade-in">
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold text-white tracking-tight glow-text">Overview</h1>
+        <h1 className="text-4xl font-bold text-slate-800 tracking-tight glow-text">Overview</h1>
         <Link to="/incidents/new" className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold shadow-[0_0_20px_rgba(79,70,229,0.4)] hover:shadow-[0_0_25px_rgba(79,70,229,0.6)] transition-all flex items-center gap-2">
           New Ticket <ChevronRight className="w-4 h-4" />
         </Link>
@@ -29,7 +29,7 @@ export default function Dashboard() {
             </div>
             <span className="font-bold uppercase tracking-wider text-xs">Action Required</span>
           </div>
-          <span className="text-5xl font-extrabold text-white">{incidents.filter(i => i.status === 'OPEN').length}</span>
+          <span className="text-5xl font-extrabold text-slate-800">{incidents.filter(i => i.status === 'OPEN').length}</span>
         </div>
         
         <div className="glass-panel rounded-2xl p-6 flex flex-col gap-3 group hover:scale-[1.02] transition-transform duration-300 relative overflow-hidden">
@@ -40,7 +40,7 @@ export default function Dashboard() {
             </div>
             <span className="font-bold uppercase tracking-wider text-xs">In Progress</span>
           </div>
-          <span className="text-5xl font-extrabold text-white">{incidents.filter(i => i.status === 'IN_PROGRESS').length}</span>
+          <span className="text-5xl font-extrabold text-slate-800">{incidents.filter(i => i.status === 'IN_PROGRESS').length}</span>
         </div>
         
         <div className="glass-panel rounded-2xl p-6 flex flex-col gap-3 group hover:scale-[1.02] transition-transform duration-300 relative overflow-hidden">
@@ -51,16 +51,16 @@ export default function Dashboard() {
             </div>
             <span className="font-bold uppercase tracking-wider text-xs">Resolved</span>
           </div>
-          <span className="text-5xl font-extrabold text-white">{incidents.filter(i => i.status === 'RESOLVED').length}</span>
+          <span className="text-5xl font-extrabold text-slate-800">{incidents.filter(i => i.status === 'RESOLVED').length}</span>
         </div>
       </div>
 
       <div className="glass-panel rounded-2xl overflow-hidden">
-        <div className="px-8 py-6 border-b border-slate-700/50 bg-slate-800/30">
-          <h2 className="text-xl font-bold text-slate-100 glow-text">Active Incidents</h2>
+        <div className="px-8 py-6 border-b border-white bg-white/40">
+          <h2 className="text-xl font-bold text-slate-800 glow-text">Active Incidents</h2>
         </div>
         <table className="w-full text-left">
-          <thead className="bg-slate-900/40 border-b border-slate-700/50">
+          <thead className="bg-white/50 border-b border-white">
             <tr>
               <th className="px-8 py-5 font-bold text-slate-400 uppercase text-xs tracking-wider">Ticket</th>
               <th className="px-8 py-5 font-bold text-slate-400 uppercase text-xs tracking-wider">Title</th>
@@ -69,17 +69,17 @@ export default function Dashboard() {
               <th className="px-8 py-5 font-bold text-slate-400 uppercase text-xs tracking-wider">Priority</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/50">
+          <tbody className="divide-y divide-white/50">
             {incidents.slice(0, 10).map(inc => (
-              <tr key={inc.id} className="hover:bg-slate-800/40 transition-colors group">
+              <tr key={inc.id} className="hover:bg-white/60 transition-colors group">
                 <td className="px-8 py-5">
                   <Link to={`/incidents/${inc.id}`} className="text-indigo-400 font-semibold group-hover:text-indigo-300 group-hover:underline">
                     {inc.ticketNumber}
                   </Link>
                 </td>
-                <td className="px-8 py-5 text-slate-300 font-medium truncate max-w-xs">{inc.title}</td>
-                <td className="px-8 py-5 text-slate-400 text-sm">
-                  <span className="bg-slate-800/80 px-3 py-1 rounded-md border border-slate-700">
+                <td className="px-8 py-5 text-slate-700 font-medium truncate max-w-xs">{inc.title}</td>
+                <td className="px-8 py-5 text-slate-600 text-sm">
+                  <span className="bg-white px-3 py-1 rounded-md border border-slate-200">
                     {inc.categoryId || 'Unknown'}
                   </span>
                 </td>
@@ -93,9 +93,9 @@ export default function Dashboard() {
                 </td>
                 <td className="px-8 py-5">
                   <span className={`px-3 py-1 text-[11px] rounded-lg font-extrabold uppercase border
-                    ${inc.priority === 'CRITICAL' ? 'bg-red-500/20 text-red-400 border-red-500/30' : 
-                      inc.priority === 'HIGH' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' : 
-                      'bg-slate-800 text-slate-400 border-slate-700'}`}>
+                    ${inc.priority === 'CRITICAL' ? 'bg-red-500/20 text-red-600 border-red-500/30' : 
+                      inc.priority === 'HIGH' ? 'bg-orange-500/10 text-orange-600 border-orange-500/20' : 
+                      'bg-slate-100 text-slate-600 border-slate-300'}`}>
                     {inc.priority || 'MEDIUM'}
                   </span>
                 </td>

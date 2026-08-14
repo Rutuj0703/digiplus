@@ -30,8 +30,8 @@ export default function CreateIncident() {
   return (
     <div className="max-w-3xl mx-auto space-y-8 fade-in pb-10">
       <div className="flex flex-col gap-2">
-         <h1 className="text-4xl font-extrabold text-white glow-text">Raise a Ticket</h1>
-         <p className="text-slate-400">Our AI agent will automatically categorize and prioritize your request.</p>
+         <h1 className="text-4xl font-extrabold text-slate-800 glow-text">Raise a Ticket</h1>
+         <p className="text-slate-600">Our AI agent will automatically categorize and prioritize your request.</p>
       </div>
       
       <div className="glass-panel p-10 rounded-2xl relative overflow-hidden">
@@ -39,23 +39,23 @@ export default function CreateIncident() {
         
         <form onSubmit={handleSubmit} className="relative space-y-6 z-10">
           <div className="space-y-2">
-            <label className="block text-sm font-bold text-indigo-300 uppercase tracking-wider">Issue Summary</label>
+            <label className="block text-sm font-bold text-indigo-700 uppercase tracking-wider">Issue Summary</label>
             <input required type="text" value={title} onChange={e => setTitle(e.target.value)}
-              className="w-full px-5 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all glow-box" 
+              className="w-full px-5 py-3 bg-white/60 backdrop-blur-md border border-white rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition-all glow-box" 
               placeholder="e.g. Cannot connect to Office VPN" />
           </div>
           
           <div className="space-y-2">
-            <label className="block text-sm font-bold text-indigo-300 uppercase tracking-wider">Detailed Description</label>
+            <label className="block text-sm font-bold text-indigo-700 uppercase tracking-wider">Detailed Description</label>
             <textarea required rows={6} value={description} onChange={e => setDescription(e.target.value)}
-              className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all glow-box" 
+              className="w-full px-5 py-4 bg-white/60 backdrop-blur-md border border-white rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition-all glow-box" 
               placeholder="Provide error codes, exact steps to reproduce, and any impact details..." />
           </div>
           
           <div className="space-y-2">
-            <label className="block text-sm font-bold text-indigo-300 uppercase tracking-wider">Reporter Name</label>
+            <label className="block text-sm font-bold text-indigo-700 uppercase tracking-wider">Reporter Name</label>
             <input type="text" value={reporter} onChange={e => setReporter(e.target.value)}
-              className="w-full px-5 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all glow-box" 
+              className="w-full px-5 py-3 bg-white/60 backdrop-blur-md border border-white rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition-all glow-box" 
               placeholder="John Doe" />
           </div>
           

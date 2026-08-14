@@ -9,37 +9,37 @@ function App() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-200 font-sans overflow-hidden relative">
+    <div className="flex h-screen bg-transparent text-slate-800 font-sans overflow-hidden relative">
       {/* Dynamic Background Gradients */}
-      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-fuchsia-600/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-indigo-400/20 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-emerald-400/20 blur-[150px] rounded-full pointer-events-none" />
 
       {/* Sidebar */}
       <aside className="w-64 floating-sidebar flex flex-col gap-6 py-8 px-5 z-10">
         <div className="flex items-center gap-3 px-2 mb-4 group cursor-default">
           <div className="relative">
-             <div className="absolute inset-0 bg-indigo-500 rounded-lg blur opacity-50 group-hover:opacity-100 transition-opacity" />
-             <div className="relative bg-slate-900 border border-slate-700 p-2 rounded-lg">
-                <Activity className="w-6 h-6 text-indigo-400" />
+             <div className="absolute inset-0 bg-indigo-500 rounded-lg blur opacity-30 group-hover:opacity-60 transition-opacity" />
+             <div className="relative bg-white border border-indigo-100 p-2 rounded-lg shadow-sm">
+                <Activity className="w-6 h-6 text-indigo-600" />
              </div>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-wide glow-text">DigiPlusAI</h1>
+          <h1 className="text-2xl font-bold text-slate-800 tracking-wide">DigiPlusAI</h1>
         </div>
         
         <nav className="flex flex-col gap-3">
-          <Link to="/" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive('/') ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.15)]' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'}`}>
+          <Link to="/" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive('/') ? 'bg-white/80 text-indigo-700 border border-white shadow-sm' : 'text-slate-600 hover:bg-white/50 hover:text-slate-900'}`}>
             <LayoutDashboard className="w-5 h-5" /> <span className="font-medium">Overview</span>
           </Link>
-          <Link to="/incidents/new" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive('/incidents/new') ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.15)]' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'}`}>
+          <Link to="/incidents/new" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive('/incidents/new') ? 'bg-white/80 text-indigo-700 border border-white shadow-sm' : 'text-slate-600 hover:bg-white/50 hover:text-slate-900'}`}>
             <PlusCircle className="w-5 h-5" /> <span className="font-medium">New Ticket</span>
           </Link>
-          <Link to="/search" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive('/search') ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.15)]' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'}`}>
+          <Link to="/search" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive('/search') ? 'bg-white/80 text-indigo-700 border border-white shadow-sm' : 'text-slate-600 hover:bg-white/50 hover:text-slate-900'}`}>
             <Search className="w-5 h-5" /> <span className="font-medium">Intelligence</span>
           </Link>
           
-          <div className="mt-6 px-4 uppercase text-[10px] font-bold text-slate-500 tracking-[0.2em]">Knowledge Center</div>
+          <div className="mt-6 px-4 uppercase text-[10px] font-bold text-slate-400 tracking-[0.2em]">Knowledge Center</div>
           
-          <Link to="/knowledge" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive('/knowledge') ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'}`}>
+          <Link to="/knowledge" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive('/knowledge') ? 'bg-white/80 text-indigo-700 border border-white shadow-sm' : 'text-slate-600 hover:bg-white/50 hover:text-slate-900'}`}>
             <BookOpen className="w-5 h-5" /> <span className="font-medium">Library</span>
           </Link>
         </nav>
@@ -50,14 +50,14 @@ function App() {
         {/* Top Header */}
         <header className="h-20 glass-header flex items-center justify-between px-10 shadow-sm z-20 sticky top-0">
           <div className="flex items-center gap-4">
-             <h2 className="text-xl font-semibold text-slate-100 tracking-tight">IT Service Engine</h2>
-             <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 text-xs font-bold rounded-full border border-emerald-500/20 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+             <h2 className="text-xl font-semibold text-slate-800 tracking-tight">IT Service Engine</h2>
+             <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200 flex items-center gap-2 shadow-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 SYSTEM ONLINE
              </span>
           </div>
           <div className="flex items-center gap-4">
-             <div className="w-9 h-9 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-300 font-bold shadow-[0_0_15px_rgba(99,102,241,0.2)] hover:scale-105 transition-transform cursor-pointer">
+             <div className="w-9 h-9 rounded-full bg-white border border-indigo-100 flex items-center justify-center text-indigo-600 font-bold shadow-sm hover:scale-105 transition-transform cursor-pointer">
                A
              </div>
           </div>

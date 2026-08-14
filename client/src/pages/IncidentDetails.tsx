@@ -91,11 +91,11 @@ export default function IncidentDetails() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
-          <div className="bg-slate-900 rounded-xl shadow-lg border border-slate-800 overflow-hidden text-slate-200">
-            <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-              <h2 className="text-lg font-semibold flex items-center gap-2 text-white"><Bot className="w-5 h-5 text-blue-400"/> AI Analysis</h2>
+          <div className="bg-white/60 backdrop-blur-xl rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white overflow-hidden text-slate-800">
+            <div className="px-6 py-4 border-b border-white/80 bg-white/40 flex items-center justify-between">
+              <h2 className="text-lg font-semibold flex items-center gap-2 text-slate-800"><Bot className="w-5 h-5 text-indigo-600"/> AI Analysis</h2>
               {!incident.AIAnalysis && (
-                <button onClick={analyzeWithAI} disabled={loadingAI} className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded font-medium text-sm transition-colors disabled:opacity-50">
+                <button onClick={analyzeWithAI} disabled={loadingAI} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded font-medium text-sm transition-colors disabled:opacity-50">
                   {loadingAI ? 'Analyzing Incident...' : 'Analyze with AI'}
                 </button>
               )}
@@ -104,20 +104,20 @@ export default function IncidentDetails() {
               {incident.AIAnalysis ? (
                 <div className="space-y-4">
                   <div>
-                    <div className="text-xs font-bold text-slate-400 uppercase mb-1">Summary</div>
-                    <p className="text-slate-300">{incident.AIAnalysis.summary}</p>
+                    <div className="text-xs font-bold text-slate-500 uppercase mb-1">Summary</div>
+                    <p className="text-slate-700">{incident.AIAnalysis.summary}</p>
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-slate-400 uppercase mb-1">Probable Cause</div>
-                    <p className="text-white bg-slate-800 p-3 rounded-lg border border-slate-700">{incident.AIAnalysis.probableCause}</p>
+                    <div className="text-xs font-bold text-slate-500 uppercase mb-1">Probable Cause</div>
+                    <p className="text-slate-800 bg-white p-3 rounded-lg border border-slate-200">{incident.AIAnalysis.probableCause}</p>
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-slate-400 uppercase mb-1">Recommended Resolution</div>
-                    <p className="text-emerald-400 font-medium">{incident.AIAnalysis.recommendedResolution}</p>
+                    <div className="text-xs font-bold text-slate-500 uppercase mb-1">Recommended Resolution</div>
+                    <p className="text-emerald-700 font-medium">{incident.AIAnalysis.recommendedResolution}</p>
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-slate-400 uppercase mb-2">Troubleshooting Steps</div>
-                    <ul className="list-decimal pl-5 space-y-1 text-slate-300">
+                    <div className="text-xs font-bold text-slate-500 uppercase mb-2">Troubleshooting Steps</div>
+                    <ul className="list-decimal pl-5 space-y-1 text-slate-700">
                       {incident.AIAnalysis.troubleshootingSteps?.map((step: string, i: number) => <li key={i}>{step}</li>)}
                     </ul>
                   </div>
