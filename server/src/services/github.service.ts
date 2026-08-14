@@ -5,7 +5,7 @@ const { GITHUB_TOKEN } = process.env;
 
 export const getGitHubPullRequest = async (owner: string, repo: string, prNumber: number) => {
     if (!GITHUB_TOKEN) {
-        return { status: 'OPEN', latestCommitSha: 'mocksha123', pullRequestUrl: `https://github.com/${owner}/${repo}/pull/${prNumber}` };
+        throw new Error('GitHub Integration Unavailable');
     }
     const url = `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}`;
     const res = await fetch(url, {
@@ -21,7 +21,9 @@ export const getGitHubPullRequest = async (owner: string, repo: string, prNumber
 };
 
 export const getGitHubActionsStatus = async (owner: string, repo: string, ref: string) => {
-    if (!GITHUB_TOKEN) return 'SUCCESS'; // Mock
+    if (!GITHUB_TOKEN) {
+        throw new Error('GitHub Integration Unavailable');
+    }
     const url = `https://api.github.com/repos/${owner}/${repo}/commits/${ref}/check-runs`;
     const res = await fetch(url, { headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' } });
     if (!res.ok) return 'UNKNOWN';

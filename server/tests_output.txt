@@ -1,0 +1,9 @@
+Testing POST /api/incidents...
+Incident Created: INC-3817 Category: Unknown
+Testing search indirectly...
+Testing POST /api/incidents/:id/analyze...
+Analysis Success: false
+Error from analysis: {
+  success: false,
+  message: 'AI analysis could not be completed. The incident has been saved.'
+}

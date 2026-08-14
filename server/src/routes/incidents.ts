@@ -20,6 +20,18 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Hybrid Search
+router.get('/search', async (req, res) => {
+    try {
+        const query = req.query.q as string;
+        if (!query) return res.json({ incidents: [], articles: [] });
+        const searchResults = await hybridSearch(query);
+        res.json(searchResults);
+    } catch (e) {
+        res.status(500).json({ error: 'Search failed' });
+    }
+});
+
 // Single incident
 router.get('/:id', async (req, res) => {
     try {

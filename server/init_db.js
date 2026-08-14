@@ -36,7 +36,7 @@ async function main() {
           "assignedAgentId" TEXT,
           "reporter" TEXT NOT NULL,
           "searchVector" tsvector,
-          "embedding" vector(1536),
+          "embedding" vector(768),
           "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
           "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
           "resolvedAt" TIMESTAMP,
@@ -60,7 +60,7 @@ async function main() {
           "category" TEXT NOT NULL,
           "tags" TEXT[],
           "searchVector" tsvector,
-          "embedding" vector(1536),
+          "embedding" vector(768),
           "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
           "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       );

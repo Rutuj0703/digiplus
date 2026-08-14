@@ -1,0 +1,59 @@
+Gen: undefined
+{
+  "id": "v1_ChdROUotYXY3Mk9kSy1nOFVQd3QtUGtBdxIXUTlKLWF2NzJPZEstZzhVUHd0LVBrQXc",
+  "status": "completed",
+  "usage": {
+    "total_tokens": 12,
+    "total_input_tokens": 9,
+    "input_tokens_by_modality": [
+      {
+        "modality": "text",
+        "tokens": 9
+      }
+    ],
+    "total_cached_tokens": 0,
+    "total_output_tokens": 3,
+    "total_tool_use_tokens": 0,
+    "total_thought_tokens": 0,
+    "raw_prompt_token": 38
+  },
+  "created": "2026-08-14T08:30:59Z",
+  "updated": "2026-08-14T08:30:59Z",
+  "service_tier": "standard",
+  "steps": [
+    {
+      "signature": "EnEKbwERTTIPz+MX4/gWDiqycyiPNqpIuH4/xKnS6QFvOmuhNpnDwx22/HU028f32S7CB0FO4HA7IM3HqlBSeyM8ecgCvuUrImUElC5+IYuxv0dPuTg6SyUnQYdqmKovrdYy71eCiUlkdk2YtF3Y3nuEwQ==",
+      "type": "thought"
+    },
+    {
+      "content": [
+        {
+          "text": "Gemini works",
+          "type": "text"
+        }
+      ],
+      "type": "model_output"
+    }
+  ],
+  "object": "interaction",
+  "model": "gemini-3.1-flash-lite",
+  "sdkHttpResponse": {
+    "headers": {
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "content-encoding": "gzip",
+      "content-type": "application/json",
+      "date": "Fri, 14 Aug 2026 08:31:02 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "server-timing": "gfet4t7; dur=12060",
+      "transfer-encoding": "chunked",
+      "vary": "Origin, X-Origin, Referer",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "x-xss-protection": "0"
+    },
+    "responseInternal": {}
+  },
+  "output_text": "Gemini works"
+}
+Emb exists: true
+Emb length: 768

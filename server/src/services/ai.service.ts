@@ -1,89 +1,432 @@
-import OpenAI from 'openai';
-import { z } from 'zod';
-import { zodResponseFormat } from 'openai/helpers/zod';
-import dotenv from 'dotenv';
+import { GoogleGenAI, Type } from "@google/genai";
+import dotenv from "dotenv";
+
 dotenv.config();
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || 'dummy_for_build'
-});
+const API_KEY = process.env.GEMINI_API_KEY;
 
-export const generateEmbedding = async (text: string): Promise<number[]> => {
-  if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy_for_build') {
-    return Array(1536).fill(0); // mock for tests
+const ai = API_KEY
+  ? new GoogleGenAI({ apiKey: API_KEY })
+  : null;
+
+const EMBEDDING_DIMENSION = 768;
+
+const isMockMode =
+  !API_KEY || API_KEY === "dummy_for_build";
+
+/**
+ * Generate a 768-dimensional embedding for semantic search.
+ *
+ * Model:
+ * gemini-embedding-2
+ *
+ * The 768 dimension must match the pgvector column
+ * configured in PostgreSQL.
+ */
+export const generateEmbedding = async (
+  text: string
+): Promise<number[]> => {
+  if (isMockMode) {
+    return Array(EMBEDDING_DIMENSION).fill(0);
   }
-  const response = await openai.embeddings.create({
-    model: "text-embedding-3-small",
-    input: text,
+
+  if (!ai) {
+    throw new Error("Gemini AI client is not initialized");
+  }
+
+  const response = await ai.models.embedContent({
+    model: "gemini-embedding-2",
+    contents: text,
+    config: {
+      outputDimensionality: EMBEDDING_DIMENSION,
+    },
   });
-  return response.data[0].embedding;
+
+  const embedding = response.embeddings?.[0]?.values;
+
+  if (!embedding || embedding.length !== EMBEDDING_DIMENSION) {
+    throw new Error(
+      `Invalid embedding returned by Gemini. Expected ${EMBEDDING_DIMENSION} dimensions, received ${embedding?.length ?? 0
+      }.`
+    );
+  }
+
+  return embedding;
 };
 
-const CategorySchema = z.object({
-  category: z.string(),
-  priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']),
-  confidence: z.number(),
-  reason: z.string(),
-});
 
-export const categorizeTicket = async (title: string, description: string) => {
-  if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy_for_build') {
-     return { category: 'network', priority: 'MEDIUM', confidence: 0.9, reason: 'Mock due to missing API key' };
-  }
-  const completion = await openai.beta.chat.completions.parse({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: "Categorize the following support ticket into one of the known organization categories (e.g. network, identity, business-apps, collaboration, security). Determine priority (LOW, MEDIUM, HIGH, CRITICAL)." },
-      { role: "user", content: `Title: ${title}\nDescription: ${description}` }
-    ],
-    response_format: zodResponseFormat(CategorySchema, "categorization"),
-  });
-  return completion.choices[0].message.parsed as any;
+/**
+ * Ticket categorization schema.
+ */
+const categorySchema = {
+  type: Type.OBJECT,
+  properties: {
+    category: {
+      type: Type.STRING,
+      description:
+        "The support category for the ticket.",
+    },
+
+    priority: {
+      type: Type.STRING,
+      enum: ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+      description:
+        "The urgency/priority of the support ticket.",
+    },
+
+    confidence: {
+      type: Type.NUMBER,
+      description:
+        "Confidence score between 0 and 1.",
+    },
+
+    reason: {
+      type: Type.STRING,
+      description:
+        "Short explanation for the classification.",
+    },
+  },
+
+  required: [
+    "category",
+    "priority",
+    "confidence",
+    "reason",
+  ],
 };
 
-const AnalysisSchema = z.object({
-  summary: z.string(),
-  category: z.string(),
-  categoryConfidence: z.number(),
-  priority: z.string(),
-  priorityConfidence: z.number(),
-  probableCause: z.string(),
-  troubleshootingSteps: z.array(z.string()),
-  recommendedResolution: z.string(),
-  confidence: z.number(),
-});
 
-export const analyzeTicket = async (incidentRaw: any, retrievedArticles: any[], retrievedIncidents: any[]) => {
-  if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy_for_build') {
-     return {
-         summary: 'Mock summary',
-         category: 'network', categoryConfidence: 0.9,
-         priority: 'HIGH', priorityConfidence: 0.8,
-         probableCause: 'Mock cause',
-         troubleshootingSteps: ['Step 1'],
-         recommendedResolution: 'Mock resolution',
-         confidence: 0.85
-     };
+/**
+ * Categorize a support ticket using Gemini.
+ */
+export const categorizeTicket = async (
+  title: string,
+  description: string
+) => {
+  if (isMockMode) {
+    return {
+      category: "network",
+      priority: "MEDIUM",
+      confidence: 0.9,
+      reason: "Mock classification because GEMINI_API_KEY is not configured.",
+    };
   }
 
-  const prompt = `CURRENT INCIDENT
-Title: ${incidentRaw.title}
-Description: ${incidentRaw.description}
-Category: ${incidentRaw.categoryId || 'unknown'}
+  if (!ai) {
+    throw new Error("Gemini AI client is not initialized");
+  }
 
-RETRIEVED KNOWLEDGE ARTICLES
-${retrievedArticles.map((a, i) => `Article ${i+1}: ${a.title} - ${a.content}`).join('\n')}
+  const prompt = `
+You are an expert IT service desk ticket classifier.
 
-RETRIEVED HISTORICAL INCIDENTS
-${retrievedIncidents.map((inc, i) => `Incident ${i+1}: ${inc.title} - ${inc.description}`).join('\n')}
+Classify the following support ticket.
+
+Known organization categories include:
+- network
+- identity
+- business-apps
+- collaboration
+- security
+- tier-1
+- tier-2
+
+Choose the category that best matches the ticket.
+
+Determine the priority:
+- LOW: Minor issue with little operational impact.
+- MEDIUM: Normal issue affecting one or a small number of users.
+- HIGH: Significant operational impact or multiple users affected.
+- CRITICAL: Major outage, security incident, or business-critical service disruption.
+
+Return a confidence score between 0 and 1.
+
+TICKET
+
+Title:
+${title}
+
+Description:
+${description}
 `;
-  const completion = await openai.beta.chat.completions.parse({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: "You are an expert IT service desk AI. Analyze the current incident using the provided context." },
-      { role: "user", content: prompt }
-    ],
-    response_format: zodResponseFormat(AnalysisSchema, "analysis"),
+
+  const response = await ai.interactions.create({
+    model: "gemini-3.5-flash",
+    input: prompt
   });
-  return completion.choices[0].message.parsed as any;
+
+  let text = (response as any).output_text;
+  if (text && text.startsWith("```json")) {
+    text = text.replace(/^```json\n?/, "").replace(/\n?```\n?$/, "");
+  }
+
+  if (!text) {
+    throw new Error(
+      "Gemini returned an empty categorization response"
+    );
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(
+      `Failed to parse Gemini categorization response: ${text}`
+    );
+  }
+};
+
+
+/**
+ * AI incident analysis schema.
+ *
+ * This is used after hybrid search retrieves:
+ * 1. Relevant knowledge articles
+ * 2. Relevant historical incidents
+ *
+ * The retrieved information becomes the RAG context.
+ */
+const analysisSchema = {
+  type: Type.OBJECT,
+
+  properties: {
+    summary: {
+      type: Type.STRING,
+      description:
+        "Concise summary of the incident.",
+    },
+
+    category: {
+      type: Type.STRING,
+      description:
+        "Most appropriate support category.",
+    },
+
+    categoryConfidence: {
+      type: Type.NUMBER,
+      description:
+        "Confidence in the category from 0 to 1.",
+    },
+
+    priority: {
+      type: Type.STRING,
+      enum: ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+      description:
+        "Recommended incident priority.",
+    },
+
+    priorityConfidence: {
+      type: Type.NUMBER,
+      description:
+        "Confidence in the priority from 0 to 1.",
+    },
+
+    probableCause: {
+      type: Type.STRING,
+      description:
+        "Most likely root or contributing cause.",
+    },
+
+    troubleshootingSteps: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.STRING,
+      },
+      description:
+        "Ordered troubleshooting steps.",
+    },
+
+    recommendedResolution: {
+      type: Type.STRING,
+      description:
+        "Recommended resolution based on the retrieved context.",
+    },
+
+    confidence: {
+      type: Type.NUMBER,
+      description:
+        "Overall confidence in the analysis from 0 to 1.",
+    },
+  },
+
+  required: [
+    "summary",
+    "category",
+    "categoryConfidence",
+    "priority",
+    "priorityConfidence",
+    "probableCause",
+    "troubleshootingSteps",
+    "recommendedResolution",
+    "confidence",
+  ],
+};
+
+
+/**
+ * Analyze an incident using RAG.
+ *
+ * retrievedArticles:
+ * Knowledge-base documents returned by hybrid search.
+ *
+ * retrievedIncidents:
+ * Historical support tickets returned by hybrid search.
+ */
+export const analyzeTicket = async (
+  incidentRaw: any,
+  retrievedArticles: any[],
+  retrievedIncidents: any[]
+) => {
+  if (isMockMode) {
+    return {
+      summary: "Mock summary",
+      category: "network",
+      categoryConfidence: 0.9,
+      priority: "HIGH",
+      priorityConfidence: 0.8,
+      probableCause: "Mock cause",
+      troubleshootingSteps: [
+        "Check service logs",
+        "Verify network connectivity",
+      ],
+      recommendedResolution: "Mock resolution",
+      confidence: 0.85,
+    };
+  }
+
+  if (!ai) {
+    throw new Error("Gemini AI client is not initialized");
+  }
+
+  const knowledgeContext =
+    retrievedArticles.length > 0
+      ? retrievedArticles
+        .map(
+          (article, index) => `
+KNOWLEDGE ARTICLE ${index + 1}
+
+Title:
+${article.title ?? "Untitled"}
+
+Content:
+${article.content ?? ""}
+`
+        )
+        .join("\n")
+      : "No relevant knowledge articles were found.";
+
+
+  const incidentContext =
+    retrievedIncidents.length > 0
+      ? retrievedIncidents
+        .map(
+          (incident, index) => `
+HISTORICAL INCIDENT ${index + 1}
+
+Title:
+${incident.title ?? "Untitled"}
+
+Description:
+${incident.description ?? ""}
+
+Category:
+${incident.category ?? incident.categoryId ?? "Unknown"}
+
+Priority:
+${incident.priority ?? "Unknown"}
+
+Resolution:
+${incident.resolution ?? "Not available"}
+`
+        )
+        .join("\n")
+      : "No relevant historical incidents were found.";
+
+
+  const prompt = `
+You are an expert IT service desk AI.
+
+Analyze the current incident using the retrieved organizational
+knowledge and historical incidents provided below.
+
+IMPORTANT:
+- Base your recommendation primarily on the retrieved context.
+- Do not invent organizational policies or historical incidents.
+- If the retrieved context does not provide enough evidence,
+  explicitly make a cautious recommendation.
+- Do not claim certainty when evidence is insufficient.
+- Use the historical incidents and knowledge articles as
+  supporting evidence for your reasoning.
+
+==============================
+CURRENT INCIDENT
+==============================
+
+Title:
+${incidentRaw.title ?? ""}
+
+Description:
+${incidentRaw.description ?? ""}
+
+Current Category:
+${incidentRaw.categoryId ?? "Unknown"}
+
+Current Priority:
+${incidentRaw.priority ?? "Unknown"}
+
+
+==============================
+RETRIEVED KNOWLEDGE ARTICLES
+==============================
+
+${knowledgeContext}
+
+
+==============================
+RETRIEVED HISTORICAL INCIDENTS
+==============================
+
+${incidentContext}
+
+
+==============================
+TASK
+==============================
+
+Provide:
+
+1. A concise incident summary.
+2. The most appropriate category.
+3. Category confidence between 0 and 1.
+4. Recommended priority.
+5. Priority confidence between 0 and 1.
+6. Probable cause.
+7. Ordered troubleshooting steps.
+8. Recommended resolution.
+9. Overall confidence between 0 and 1.
+
+Return only the requested structured JSON.
+`;
+
+  const response = await ai.interactions.create({
+    model: "gemini-3.5-flash",
+    input: prompt
+  });
+
+  let text = (response as any).output_text;
+  if (text && text.startsWith("```json")) {
+    text = text.replace(/^```json\n?/, "").replace(/\n?```\n?$/, "");
+  }
+
+  if (!text) {
+    throw new Error(
+      "Gemini returned an empty incident analysis response"
+    );
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(
+      `Failed to parse Gemini incident analysis response: ${text}`
+    );
+  }
 };

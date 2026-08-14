@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Send, Loader2 } from 'lucide-react';
 
 export default function CreateIncident() {
   const [title, setTitle] = useState('');
@@ -27,32 +28,53 @@ export default function CreateIncident() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 fade-in">
-      <h1 className="text-3xl font-bold text-slate-800">Create Support Ticket</h1>
-      <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Title</label>
+    <div className="max-w-3xl mx-auto space-y-8 fade-in pb-10">
+      <div className="flex flex-col gap-2">
+         <h1 className="text-4xl font-extrabold text-white glow-text">Raise a Ticket</h1>
+         <p className="text-slate-400">Our AI agent will automatically categorize and prioritize your request.</p>
+      </div>
+      
+      <div className="glass-panel p-10 rounded-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px]" />
+        
+        <form onSubmit={handleSubmit} className="relative space-y-6 z-10">
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-indigo-300 uppercase tracking-wider">Issue Summary</label>
             <input required type="text" value={title} onChange={e => setTitle(e.target.value)}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow outline-none" 
-              placeholder="Brief summary of the issue" />
+              className="w-full px-5 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all glow-box" 
+              placeholder="e.g. Cannot connect to Office VPN" />
           </div>
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Description</label>
-            <textarea required rows={5} value={description} onChange={e => setDescription(e.target.value)}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow outline-none" 
-              placeholder="Provide detailed information, error codes, and steps to reproduce..." />
+          
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-indigo-300 uppercase tracking-wider">Detailed Description</label>
+            <textarea required rows={6} value={description} onChange={e => setDescription(e.target.value)}
+              className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all glow-box" 
+              placeholder="Provide error codes, exact steps to reproduce, and any impact details..." />
           </div>
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Reporter</label>
+          
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-indigo-300 uppercase tracking-wider">Reporter Name</label>
             <input type="text" value={reporter} onChange={e => setReporter(e.target.value)}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow outline-none" 
-              placeholder="Your name" />
+              className="w-full px-5 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all glow-box" 
+              placeholder="John Doe" />
           </div>
-          <button type="submit" disabled={loading}
-            className="mt-4 w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold shadow-sm transition-all disabled:opacity-70 disabled:cursor-not-allowed">
-            {loading ? 'Submitting & Running AI Categorization...' : 'Submit Ticket'}
-          </button>
+          
+          <div className="pt-6">
+            <button type="submit" disabled={loading}
+              className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-extrabold shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] transition-all flex justify-center items-center gap-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed">
+              {loading ? (
+                 <>
+                   <Loader2 className="w-6 h-6 animate-spin" />
+                   Initializing AI Engine...
+                 </>
+              ) : (
+                 <>
+                   <Send className="w-5 h-5" />
+                   Submit to AI Triage
+                 </>
+              )}
+            </button>
+          </div>
         </form>
       </div>
     </div>

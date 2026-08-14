@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AlertCircle, Clock, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, Clock, CheckCircle2, ChevronRight } from 'lucide-react';
 
 export default function Dashboard() {
   const [incidents, setIncidents] = useState<any[]>([]);
@@ -12,72 +12,90 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="space-y-8 fade-in">
+    <div className="space-y-10 fade-in">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Dashboard Overview</h1>
-        <Link to="/incidents/new" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium shadow-sm transition-colors">
-          Create Incident
+        <h1 className="text-4xl font-bold text-white tracking-tight glow-text">Overview</h1>
+        <Link to="/incidents/new" className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold shadow-[0_0_20px_rgba(79,70,229,0.4)] hover:shadow-[0_0_25px_rgba(79,70,229,0.6)] transition-all flex items-center gap-2">
+          New Ticket <ChevronRight className="w-4 h-4" />
         </Link>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col gap-2">
-          <div className="flex items-center gap-3 text-slate-500 mb-2">
-            <AlertCircle className="w-5 h-5 text-red-500" />
-            <span className="font-semibold uppercase tracking-wider text-xs">Open Incidents</span>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="glass-panel rounded-2xl p-6 flex flex-col gap-3 group hover:scale-[1.02] transition-transform duration-300 relative overflow-hidden">
+          <div className="absolute -right-4 -top-4 w-24 h-24 bg-rose-500/10 rounded-full blur-2xl group-hover:bg-rose-500/20 transition-colors" />
+          <div className="flex items-center gap-3 text-slate-400 mb-2">
+            <div className="w-10 h-10 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
+               <AlertCircle className="w-5 h-5 text-rose-400" />
+            </div>
+            <span className="font-bold uppercase tracking-wider text-xs">Action Required</span>
           </div>
-          <span className="text-4xl font-bold text-slate-800">{incidents.filter(i => i.status === 'OPEN').length}</span>
+          <span className="text-5xl font-extrabold text-white">{incidents.filter(i => i.status === 'OPEN').length}</span>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col gap-2">
-          <div className="flex items-center gap-3 text-slate-500 mb-2">
-            <Clock className="w-5 h-5 text-yellow-500" />
-            <span className="font-semibold uppercase tracking-wider text-xs">In Progress</span>
+        
+        <div className="glass-panel rounded-2xl p-6 flex flex-col gap-3 group hover:scale-[1.02] transition-transform duration-300 relative overflow-hidden">
+          <div className="absolute -right-4 -top-4 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-colors" />
+          <div className="flex items-center gap-3 text-slate-400 mb-2">
+            <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+               <Clock className="w-5 h-5 text-amber-400" />
+            </div>
+            <span className="font-bold uppercase tracking-wider text-xs">In Progress</span>
           </div>
-          <span className="text-4xl font-bold text-slate-800">{incidents.filter(i => i.status === 'IN_PROGRESS').length}</span>
+          <span className="text-5xl font-extrabold text-white">{incidents.filter(i => i.status === 'IN_PROGRESS').length}</span>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col gap-2">
-          <div className="flex items-center gap-3 text-slate-500 mb-2">
-            <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-            <span className="font-semibold uppercase tracking-wider text-xs">Resolved</span>
+        
+        <div className="glass-panel rounded-2xl p-6 flex flex-col gap-3 group hover:scale-[1.02] transition-transform duration-300 relative overflow-hidden">
+          <div className="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-colors" />
+          <div className="flex items-center gap-3 text-slate-400 mb-2">
+            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+               <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+            </div>
+            <span className="font-bold uppercase tracking-wider text-xs">Resolved</span>
           </div>
-          <span className="text-4xl font-bold text-slate-800">{incidents.filter(i => i.status === 'RESOLVED').length}</span>
+          <span className="text-5xl font-extrabold text-white">{incidents.filter(i => i.status === 'RESOLVED').length}</span>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="px-6 py-5 border-b border-slate-200">
-          <h2 className="text-lg font-semibold text-slate-800">Recent Incidents</h2>
+      <div className="glass-panel rounded-2xl overflow-hidden">
+        <div className="px-8 py-6 border-b border-slate-700/50 bg-slate-800/30">
+          <h2 className="text-xl font-bold text-slate-100 glow-text">Active Incidents</h2>
         </div>
         <table className="w-full text-left">
-          <thead className="bg-slate-50 border-b border-slate-200">
+          <thead className="bg-slate-900/40 border-b border-slate-700/50">
             <tr>
-              <th className="px-6 py-4 font-semibold text-slate-500 uppercase text-xs tracking-wider">Ticket</th>
-              <th className="px-6 py-4 font-semibold text-slate-500 uppercase text-xs tracking-wider">Title</th>
-              <th className="px-6 py-4 font-semibold text-slate-500 uppercase text-xs tracking-wider">Category</th>
-              <th className="px-6 py-4 font-semibold text-slate-500 uppercase text-xs tracking-wider">Status</th>
-              <th className="px-6 py-4 font-semibold text-slate-500 uppercase text-xs tracking-wider">Priority</th>
+              <th className="px-8 py-5 font-bold text-slate-400 uppercase text-xs tracking-wider">Ticket</th>
+              <th className="px-8 py-5 font-bold text-slate-400 uppercase text-xs tracking-wider">Title</th>
+              <th className="px-8 py-5 font-bold text-slate-400 uppercase text-xs tracking-wider">Category</th>
+              <th className="px-8 py-5 font-bold text-slate-400 uppercase text-xs tracking-wider">Status</th>
+              <th className="px-8 py-5 font-bold text-slate-400 uppercase text-xs tracking-wider">Priority</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-800/50">
             {incidents.slice(0, 10).map(inc => (
-              <tr key={inc.id} className="hover:bg-slate-50 transition-colors">
-                <td className="px-6 py-4">
-                  <Link to={`/incidents/${inc.id}`} className="text-blue-600 font-medium hover:underline">{inc.ticketNumber}</Link>
+              <tr key={inc.id} className="hover:bg-slate-800/40 transition-colors group">
+                <td className="px-8 py-5">
+                  <Link to={`/incidents/${inc.id}`} className="text-indigo-400 font-semibold group-hover:text-indigo-300 group-hover:underline">
+                    {inc.ticketNumber}
+                  </Link>
                 </td>
-                <td className="px-6 py-4 text-slate-700 font-medium truncate max-w-xs">{inc.title}</td>
-                <td className="px-6 py-4 text-slate-600">{inc.categoryId || 'Unknown'}</td>
-                <td className="px-6 py-4">
-                  <span className={`px-2.5 py-1 text-xs rounded-full font-semibold tracking-wide
-                    ${inc.status === 'OPEN' ? 'bg-red-100 text-red-800' : 
-                      inc.status === 'IN_PROGRESS' ? 'bg-yellow-100 text-yellow-800' : 
-                      'bg-emerald-100 text-emerald-800'}`}>
+                <td className="px-8 py-5 text-slate-300 font-medium truncate max-w-xs">{inc.title}</td>
+                <td className="px-8 py-5 text-slate-400 text-sm">
+                  <span className="bg-slate-800/80 px-3 py-1 rounded-md border border-slate-700">
+                    {inc.categoryId || 'Unknown'}
+                  </span>
+                </td>
+                <td className="px-8 py-5">
+                  <span className={`px-3 py-1 text-[11px] rounded-lg font-bold tracking-wider uppercase border 
+                    ${inc.status === 'OPEN' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 
+                      inc.status === 'IN_PROGRESS' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 
+                      'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}`}>
                     {inc.status}
                   </span>
                 </td>
-                <td className="px-6 py-4">
-                  <span className={`px-2.5 py-1 text-xs rounded font-bold
-                    ${inc.priority === 'CRITICAL' ? 'bg-red-500 text-white' : 
-                      inc.priority === 'HIGH' ? 'text-orange-600' : 'text-slate-600'}`}>
+                <td className="px-8 py-5">
+                  <span className={`px-3 py-1 text-[11px] rounded-lg font-extrabold uppercase border
+                    ${inc.priority === 'CRITICAL' ? 'bg-red-500/20 text-red-400 border-red-500/30' : 
+                      inc.priority === 'HIGH' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' : 
+                      'bg-slate-800 text-slate-400 border-slate-700'}`}>
                     {inc.priority || 'MEDIUM'}
                   </span>
                 </td>
@@ -85,7 +103,12 @@ export default function Dashboard() {
             ))}
             {incidents.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-6 py-10 text-center text-slate-500">No active incidents found. Create one to get started.</td>
+                <td colSpan={5} className="px-8 py-16 text-center text-slate-400">
+                  <div className="flex flex-col items-center justify-center gap-4">
+                     <CheckCircle2 className="w-12 h-12 text-slate-600" />
+                     <span className="text-lg">No active incidents. You are all caught up!</span>
+                  </div>
+                </td>
               </tr>
             )}
           </tbody>
@@ -94,3 +117,4 @@ export default function Dashboard() {
     </div>
   );
 }
+

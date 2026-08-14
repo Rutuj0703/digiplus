@@ -34,7 +34,13 @@ export default function IncidentDetails() {
     try {
       const res = await fetch(`http://localhost:5000/api/incidents/${id}/jira`, { method: 'POST' });
       const data = await res.json();
-      setIncident((prev: any) => ({ ...prev, JiraIssue: data }));
+      if (!res.ok) {
+        alert(data.error || 'Failed to link Jira');
+      } else {
+        setIncident((prev: any) => ({ ...prev, JiraIssue: data }));
+      }
+    } catch (e: any) {
+      alert("Error linking Jira");
     } finally {
       setLinkingJira(false);
     }

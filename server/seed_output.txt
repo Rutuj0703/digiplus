@@ -1,0 +1,17 @@
+C:\Users\RutuJ\Desktop\digiplus\server\node_modules\.prisma\client\default.js:43
+    throw new Error('@prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.');
+          ^
+
+Error: @prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.
+    at new PrismaClient (C:\Users\RutuJ\Desktop\digiplus\server\node_modules\.prisma\client\default.js:43:11)
+    at fs (C:\Users\RutuJ\Desktop\digiplus\server\src\seed.ts:5:16)
+    at Object.<anonymous> (C:\Users\RutuJ\Desktop\digiplus\server\src\seed.ts:102:4)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object.transformer (C:\Users\RutuJ\Desktop\digiplus\node_modules\tsx\dist\register-C557imBs.cjs:9:3619)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at cjsLoader (node:internal/modules/esm/translators:266:5)
+
+Node.js v22.16.0

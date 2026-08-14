@@ -1,0 +1,47 @@
+Generating embeddings for a sample of data...
+PrismaClientValidationError: 
+Invalid `prisma.incident.findMany()` invocation in
+C:\Users\RutuJ\Desktop\digiplus\server\src\seed_embeddings.ts:21:45
+
+  18     return;
+  19 }
+  20 
+→ 21 const incidents = await prisma.incident.findMany({
+       take: 20,
+       where: {
+         embedding: null,
+         ~~~~~~~~~
+     ?   AND?: IncidentWhereInput | IncidentWhereInput[],
+     ?   OR?: IncidentWhereInput[],
+     ?   NOT?: IncidentWhereInput | IncidentWhereInput[],
+     ?   id?: StringFilter | String,
+     ?   ticketNumber?: StringFilter | String,
+     ?   title?: StringFilter | String,
+     ?   description?: StringFilter | String,
+     ?   status?: StringFilter | String,
+     ?   priority?: StringNullableFilter | String | Null,
+     ?   categoryId?: StringNullableFilter | String | Null,
+     ?   assignedAgentId?: StringNullableFilter | String | Null,
+     ?   reporter?: StringFilter | String,
+     ?   createdAt?: DateTimeFilter | DateTime,
+     ?   updatedAt?: DateTimeFilter | DateTime,
+     ?   resolvedAt?: DateTimeNullableFilter | DateTime | Null,
+     ?   resolution?: StringNullableFilter | String | Null,
+     ?   AIAnalysis?: AIAnalysisNullableRelationFilter | AIAnalysisWhereInput | Null,
+     ?   CategoryPrediction?: CategoryPredictionListRelationFilter,
+     ?   Comment?: CommentListRelationFilter,
+     ?   GitHubLink?: GitHubLinkListRelationFilter,
+     ?   Agent?: AgentNullableRelationFilter | AgentWhereInput | Null,
+     ?   JiraIssue?: JiraIssueNullableRelationFilter | JiraIssueWhereInput | Null
+       }
+     })
+
+Unknown argument `embedding`. Available options are marked with ?.
+    at Dn (C:\Users\RutuJ\Desktop\digiplus\server\src\generated\prisma\runtime\library.js:114:8082)
+    at Mn.handleRequestError (C:\Users\RutuJ\Desktop\digiplus\server\src\generated\prisma\runtime\library.js:121:7396)
+    at Mn.handleAndLogRequestError (C:\Users\RutuJ\Desktop\digiplus\server\src\generated\prisma\runtime\library.js:121:7061)
+    at Mn.request (C:\Users\RutuJ\Desktop\digiplus\server\src\generated\prisma\runtime\library.js:121:6745)
+    at async l (C:\Users\RutuJ\Desktop\digiplus\server\src\generated\prisma\runtime\library.js:130:9633)
+    at async main (C:\Users\RutuJ\Desktop\digiplus\server\src\seed_embeddings.ts:21:23) {
+  clientVersion: '5.21.1'
+}

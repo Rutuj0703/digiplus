@@ -5,7 +5,7 @@ const { JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN, JIRA_PROJECT_KEY } = process.
 
 export const createJiraIssue = async (incident: any) => {
     if (!JIRA_BASE_URL || !JIRA_EMAIL || !JIRA_API_TOKEN || !JIRA_PROJECT_KEY) {
-        return { issueKey: `MOCK-${incident.id.slice(0, 5)}`, issueUrl: `https://mock.jira/MOCK-${incident.id.slice(0,5)}`, status: 'IN PROGRESS' };
+        throw new Error('Jira Integration Unavailable: Missing credentials');
     }
     const url = `${JIRA_BASE_URL}/rest/api/3/issue`;
     const auth = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString('base64');
