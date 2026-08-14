@@ -3,13 +3,29 @@
 DigiPlusAI (formerly ResolveAI) is an intelligent, end-to-end IT Service Desk and Incident Management platform. It leverages Google Gemini's advanced generative capabilities and a robust Retrieval-Augmented Generation (RAG) pipeline to reduce ticket resolution times by providing instant categorization, historical context, and troubleshooting recommendations out of the box.
 
 ## Architecture Highlights
-- **Frontend**: React, TypeScript, Vite, Tailwind CSS.
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS with Glassmorphism Theme.
 - **Backend API**: Node.js, Express, TypeScript.
 - **Database**: PostgreSQL with `pgvector` for vector storage and semantic search.
 - **ORM**: Prisma.
 - **AI Integration**: Google Gemini API (`@google/genai` SDK) utilizing `gemini-3.5-flash` for high-speed generation and `gemini-embedding-2` for generating 768-dimensional embeddings.
 - **Hybrid Search Engine**: Fuses exact keyword matches (PostgreSQL full-text search) and semantic vector similarity (pgvector cosine similarity) using **Reciprocal Rank Fusion (RRF)**.
 - **Integrations**: Auto-creation of Jira tasks and linkage to GitHub Pull Requests/Actions.
+
+### System Architecture Flow chart
+```mermaid
+graph TD
+    A[React Client] -->|HTTP POST Request| B(Express Backend)
+    B -->|Ingest text| C{Gemini gemini-3.5-flash}
+    C -->|Auto Category & Priority| B
+    B -->|Save Incident| D[(PostgreSQL pgvector)]
+    E[Knowledge/Dataset] -->|Batch Embeddings| D
+    B -->|Analyze Context Request| F[Hybrid Search Engine]
+    F -->|Retrieves context via RRF| D
+    D -->|Vector + Full Text Match| F
+    F -->|Return Context| C
+    C -->|AI Resolution Output| B
+    B -->|Jira / GitHub Actions| G[External Systems]
+```
 
 ---
 
@@ -103,11 +119,3 @@ Navigate to `http://localhost:5173` in your browser.
 4. Click **Analyze with AI**. The pipeline seamlessly embeds your context, searches postgres keywords and vector footprints using **RRF**, and streams a customized resolution combining past organizational memory and general knowledge.
 5. Optionally click **Create Jira** to post an integrated tracking issue.
 
----
-
-## ☁️ Deployment Strategy
-This project is configured natively to adapt to Vercel Deployments utilizing a unified root `vercel.json` config.
-- The React GUI is published via static web builds (`@vercel/static-build`). 
-- The Express API is mapped via rewrites to serverless execution endpoints using `@vercel/node` dynamically executing `server/src/index.ts`. 
-
-Simply link the root directory to your favorite Vercel project configuration and ensure the Database + Environment Variable secrets map over.

@@ -149,13 +149,13 @@ Description:
 ${description}
 `;
 
-  const response = await ai.interactions.create({
+  const response = await ai.models.generateContent({
     model: "gemini-3.5-flash",
-    input: prompt
+    contents: prompt
   });
 
-  let text = (response as any).output_text;
-  if (text && text.startsWith("```json")) {
+  let text = response.text || (response as any).output_text || "";
+  if (text.startsWith("```json")) {
     text = text.replace(/^```json\n?/, "").replace(/\n?```\n?$/, "");
   }
 
@@ -406,13 +406,13 @@ Provide:
 Return only the requested structured JSON.
 `;
 
-  const response = await ai.interactions.create({
+  const response = await ai.models.generateContent({
     model: "gemini-3.5-flash",
-    input: prompt
+    contents: prompt
   });
 
-  let text = (response as any).output_text;
-  if (text && text.startsWith("```json")) {
+  let text = response.text || (response as any).output_text || "";
+  if (text.startsWith("```json")) {
     text = text.replace(/^```json\n?/, "").replace(/\n?```\n?$/, "");
   }
 
