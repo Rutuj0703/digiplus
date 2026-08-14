@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://resolveai:password@127.0.0.1:5432/resolveai_db?schema=public"
+}
+
+model AIAnalysis {
+  id                    String   @id
+  incidentId            String   @unique
+  summary               String
+  category              String
+  priority              String
+  probableCause         String
+  troubleshootingSteps  String[]
+  recommendedResolution String
+  confidence            Float
+  createdAt             DateTime @default(now()) @db.Timestamp(6)
+  updatedAt             DateTime @default(now()) @db.Timestamp(6)
+  Incident              Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Agent {
+  id       String     @id
+  name     String
+  team     String
+  Incident Incident[]
+}
+
+model Category {
+  id          String @id
+  name        String
+  description String
+}
+
+model CategoryPrediction {
+  id                String   @id
+  incidentId        String
+  predictedCategory String
+  confidence        Float
+  model             String
+  createdAt         DateTime @default(now()) @db.Timestamp(6)
+  Incident          Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Comment {
+  id         String   @id
+  incidentId String
+  author     String
+  body       String
+  createdAt  DateTime @default(now()) @db.Timestamp(6)
+  Incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model GitHubLink {
+  id                String   @id
+  incidentId        String
+  owner             String
+  repository        String
+  issueNumber       Int?
+  pullRequestNumber Int?
+  pullRequestUrl    String?
+  status            String
+  latestCommitSha   String?
+  ciStatus          String?
+  createdAt         DateTime @default(now()) @db.Timestamp(6)
+  updatedAt         DateTime @default(now()) @db.Timestamp(6)
+  Incident          Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Incident {
+  id                 String                   @id
+  ticketNumber       String                   @unique
+  title              String
+  description        String
+  status             String
+  priority           String?
+  categoryId         String?
+  assignedAgentId    String?
+  reporter           String
+  searchVector       Unsupported("tsvector")?
+  embedding          Unsupported("vector")?
+  createdAt          DateTime                 @default(now()) @db.Timestamp(6)
+  updatedAt          DateTime                 @default(now()) @db.Timestamp(6)
+  resolvedAt         DateTime?                @db.Timestamp(6)
+  resolution         String?
+  AIAnalysis         AIAnalysis?
+  CategoryPrediction CategoryPrediction[]
+  Comment            Comment[]
+  GitHubLink         GitHubLink[]
+  Agent              Agent?                   @relation(fields: [assignedAgentId], references: [id], onUpdate: NoAction)
+  JiraIssue          JiraIssue?
+
+  @@index([categoryId], map: "idx_incident_category")
+  @@index([createdAt], map: "idx_incident_created")
+  @@index([priority], map: "idx_incident_priority")
+  @@index([status], map: "idx_incident_status")
+}
+
+model JiraIssue {
+  id         String   @id
+  incidentId String   @unique
+  issueKey   String
+  issueUrl   String
+  summary    String
+  status     String
+  createdAt  DateTime @default(now()) @db.Timestamp(6)
+  updatedAt  DateTime @default(now()) @db.Timestamp(6)
+  Incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model KnowledgeArticle {
+  id           String                   @id
+  title        String
+  content      String
+  category     String
+  tags         String[]
+  searchVector Unsupported("tsvector")?
+  embedding    Unsupported("vector")?
+  createdAt    DateTime                 @default(now()) @db.Timestamp(6)
+  updatedAt    DateTime                 @default(now()) @db.Timestamp(6)
+}

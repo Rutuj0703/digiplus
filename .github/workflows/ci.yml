@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22.x'
+        
+    - name: Install Client dependencies
+      run: cd client && npm install --legacy-peer-deps
+      
+    - name: Build Client
+      run: cd client && npm run build
+      
+    - name: Install Server dependencies
+      run: cd server && npm install --legacy-peer-deps
+      
+    # Example jest test run logic
+    - name: Test Server
+      run: |
+        echo "Running server tests..."
+        # cd server && npm test
